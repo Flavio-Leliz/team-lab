@@ -3,51 +3,75 @@ import Bannner from './components/Banner';
 import Form from './components/Form';
 import Team from './components/Team';
 import Footer from './components/Footer';
+import { v4 as uuidv4 } from 'uuid'
 
 function App() {
 
-  const teams = [
+  const [teams, setTeams] = useState([
     {
+      id: uuidv4(),
       name: 'Programação',
-      primaryColor: '#52C278',
-      secondaryColor: '#D9F7E9'
+      color: '#52C278',
     },
     {
+      id: uuidv4(),
       name: 'Front-End',
-      primaryColor: '#82CFFA',
-      secondaryColor: '#E8F8FF'
+      color: '#82CFFA',
     },
     {
+      id: uuidv4(),
       name: 'Data Science',
-      primaryColor: '#A6D157',
-      secondaryColor: '#F0F8E2'
+      color: '#A6D157',
     },
     {
+      id: uuidv4(),
       name: 'Devops',
-      primaryColor: '#E06B69',
-      secondaryColor: '#FDE7E8'
+      color: '#E06B69',
     },
     {
+      id: uuidv4(),
       name: 'UX e Design',
-      primaryColor: '#DB6EBF',
-      secondaryColor: '#FAE9F5'
+      color: '#DB6EBF',
     },
     {
+      id: uuidv4(),
       name: 'Mobile',
-      primaryColor: '#FFBA05',
-      secondaryColor: '#FFF5D9'
+      color: '#FFBA05',
     },
     {
+      id: uuidv4(),
       name: 'Inovação e Gestão',
-      primaryColor: '#FF8A29',
-      secondaryColor: '#FFEEDF'
+      color: '#FF8A29',
     },
-  ]
+  ])
+
+  // const collaboratorProps = [
+  //   {
+  //     id: uuidv4(),
+  //     name: ''
+  //     job: ''
+  //     image: ''
+  //     team: teams[0].name
+  //   }
+  // ]
 
   const [collaborators, setCollaborators] = useState([])
 
-  const handleAddNewCollaborator = (collaborator) => {
-    setCollaborators([...collaborators, collaborator])
+  const handleOnDelete = (id) => {
+    setCollaborators(collaborators.filter(collaborator => collaborator.id !== id))
+  }
+
+  const handleChangeColor = (color, id) => {
+    setTeams(teams.map(team => {
+      if (team.id === id) {
+        team.color = color
+      }
+      return team
+    }))
+  }
+
+  const handleAddNewTeam = (newTeam) => {
+    setTeams([...teams, { ...newTeam, id: uuidv4() }])
   }
 
   return (
@@ -55,20 +79,25 @@ function App() {
       <Bannner />
       <Form
         teams={teams.map(team => team.name)}
-        addCollaborator={collaborator => handleAddNewCollaborator(collaborator)}
+        addCollaborator={collaborator => setCollaborators([...collaborators, collaborator])}
+        addNewTeam={handleAddNewTeam}
       />
-
-      {teams.map(team => {
-        return (
-          <Team
-            key={team.name}
-            teamName={team.name}
-            primaryColor={team.primaryColor}
-            secondaryColor={team.secondaryColor}
-            collaborators={collaborators.filter((collaborators) => collaborators.team === team.name)}
-          />
-        )
-      })}
+      <section className='teams'>
+        <h1>Times</h1>
+        {teams.map((team) => {
+          return (
+            <Team
+              key={team.id}
+              team={team}
+              color={team.color}
+              secondaryColor={team.secondaryColor}
+              collaborators={collaborators.filter((collaborator) => collaborator.team === team.name)}
+              onDelete={handleOnDelete}
+              changeColor={handleChangeColor}
+            />
+          )
+        })}
+      </section>
 
       <Footer />
 

@@ -4,15 +4,22 @@ import DropdownList from '../DropdownList'
 import TextInput from '../TextInput'
 import './Form.css'
 
-const Form = (props) => {
+const Form = ({
+  addCollaborator,
+  teams,
+  addNewTeam,
+  color
+}) => {
   const [name, setName] = useState('')
   const [job, setJob] = useState('')
   const [image, setImage] = useState('')
   const [team, setTeam] = useState('')
+  const [teamName, setTeamName] = useState('')
+  const [teamColor, setTeamColor] = useState('')
 
   const onSave = (event) => {
     event.preventDefault()
-    props.addCollaborator({
+    addCollaborator({
       name,
       job,
       image,
@@ -26,8 +33,11 @@ const Form = (props) => {
 
 
   return (
-    <section className='form'>
-      <form onSubmit={onSave}>
+    <section className='form-container'>
+      <form
+        className='form'
+        onSubmit={onSave}
+      >
         <h2>Preencha os dados para criar o card do colaborador.</h2>
 
         <TextInput
@@ -53,7 +63,7 @@ const Form = (props) => {
         />
         <DropdownList
           label='Time'
-          itens={props.teams}
+          itens={teams}
           required={true}
           selectValue={team}
           onChanger={selectValue => setTeam(selectValue)}
@@ -63,7 +73,36 @@ const Form = (props) => {
           Criar Card
         </Button>
       </form>
-    </section>
+
+      <form
+        className='form'
+        onSubmit={event => {
+          event.preventDefault()
+          addNewTeam({ name: teamName, color: teamColor })
+        }}
+      >
+        <h2>Preencha os dados para criar um novo time</h2>
+
+        <TextInput
+          label='Nome'
+          placeholder='Digite o nome do time'
+          required={true}
+          inputValue={teamName}
+          onChanger={selectValue => setTeamName(selectValue)}
+        />
+        <TextInput
+          label='Cor'
+          type='color'
+          inputValue={color}
+          placeholder='Digite a cor do time'
+          onChanger={selectColor => setTeamColor(selectColor)}
+        />
+
+        <Button>
+          Cirar Time
+        </Button>
+      </form>
+    </section >
   )
 }
 
