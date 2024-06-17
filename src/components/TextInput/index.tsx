@@ -1,13 +1,22 @@
 import './TextInput.css'
 
+interface TextInputProps {
+  label: string
+  placeholder: string
+  required?: boolean
+  inputValue: string
+  type?: string
+  onChanger: (value: string) => void
+}
+
 const TextInput = ({
   label,
   placeholder,
-  required,
+  required = false,
   inputValue,
   type = 'text',
   onChanger
-}) => {
+}: TextInputProps) => {
 
   return (
     <div className={`text text-${type}`}>

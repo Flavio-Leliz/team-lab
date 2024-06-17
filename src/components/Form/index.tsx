@@ -3,13 +3,22 @@ import Button from '../Button'
 import DropdownList from '../DropdownList'
 import TextInput from '../TextInput'
 import './Form.css'
+import { ICollaborator } from '../../shared/interfaces/ICollaborator'
+import { ITeam } from '../../shared/interfaces/ITeam'
+import { v4 as uuidv4 } from 'uuid'
+
+interface FormProps {
+  addCollaborator: (collaborator: ICollaborator) => void
+  teams: ITeam[]
+  addNewTeam: (team: ITeam) => void
+}
 
 const Form = ({
   addCollaborator,
   teams,
   addNewTeam,
-  color
-}) => {
+}: FormProps) => {
+  // refatorar esses useState para um []
   const [name, setName] = useState('')
   const [job, setJob] = useState('')
   const [image, setImage] = useState('')
@@ -17,13 +26,14 @@ const Form = ({
   const [teamName, setTeamName] = useState('')
   const [teamColor, setTeamColor] = useState('')
 
-  const onSave = (event) => {
+  const onSaveCollaborator = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     addCollaborator({
-      name,
-      job,
+      id: uuidv4(),
       image,
-      team
+      job,
+      team,
+      name
     })
     setName('')
     setJob('')
@@ -31,12 +41,22 @@ const Form = ({
     setTeam('')
   }
 
+  const onSaveTeam = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    addNewTeam({
+      id: uuidv4(),
+      name: teamName,
+      color: teamColor,
+    })
+    setTeamName('')
+    setTeamColor('')
+  }
 
   return (
     <section className='form-container'>
       <form
         className='form'
-        onSubmit={onSave}
+        onSubmit={onSaveCollaborator}
       >
         <h2>Preencha os dados para criar o card do colaborador.</h2>
 
@@ -61,9 +81,10 @@ const Form = ({
           inputValue={image}
           onChanger={inputValue => setImage(inputValue)}
         />
+
         <DropdownList
           label='Time'
-          itens={teams}
+          teams={teams}
           required={true}
           selectValue={team}
           onChanger={selectValue => setTeam(selectValue)}
@@ -76,10 +97,7 @@ const Form = ({
 
       <form
         className='form'
-        onSubmit={event => {
-          event.preventDefault()
-          addNewTeam({ name: teamName, color: teamColor })
-        }}
+        onSubmit={onSaveTeam}
       >
         <h2>Preencha os dados para criar um novo time</h2>
 
@@ -91,15 +109,16 @@ const Form = ({
           onChanger={selectValue => setTeamName(selectValue)}
         />
         <TextInput
+          required={true}
           label='Cor'
           type='color'
-          inputValue={color}
+          inputValue={teamColor}
           placeholder='Digite a cor do time'
           onChanger={selectColor => setTeamColor(selectColor)}
         />
 
         <Button>
-          Cirar Time
+          Criar Time
         </Button>
       </form>
     </section >

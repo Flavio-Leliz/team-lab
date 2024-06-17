@@ -1,14 +1,23 @@
-import hexToRgba from 'hex-to-rgba'
-import Collaborator from '../Collaborator'
 import './Team.css'
+import hexToRgba from 'hex-to-rgba'
+
+import { ICollaborator } from '../../shared/interfaces/ICollaborator'
+import { ITeam } from '../../shared/interfaces/ITeam'
+import Collaborator from '../Collaborator'
+
+interface TeamProps {
+  changeColor: (color: string, id: string) => void
+  team: ITeam
+  collaborators: ICollaborator[]
+  onDelete: (id: string) => void
+}
 
 const Team = ({
   changeColor,
   team,
-  color,
   collaborators,
   onDelete,
-}) => {
+}: TeamProps) => {
   return (
     collaborators.length > 0 &&
     <section
@@ -17,12 +26,12 @@ const Team = ({
     >
       <input
         type='color'
-        value={color}
+        value={team.color}
         className='input-color'
         onChange={(event) => changeColor(event.target.value, team.id)}
       />
       <h3
-        style={{ borderColor: color }}
+        style={{ borderColor: team.color }}
       >
         {team.name}
       </h3>
@@ -30,9 +39,9 @@ const Team = ({
       <div className='collaborators'>
         {collaborators.map((collaborator) => {
           return (
-            < Collaborator
-              key={collaborator.name}
-              backgroundColor={color}
+            <Collaborator
+              key={collaborator.id}
+              backgroundColor={team.color}
               collaborator={collaborator}
               onDelete={onDelete}
             />

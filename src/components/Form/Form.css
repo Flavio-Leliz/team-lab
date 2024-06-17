@@ -15,6 +15,7 @@
 }
 
 .form-container .form h2 {
-  font-weight: 400;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
   font-size: 32px;
 }

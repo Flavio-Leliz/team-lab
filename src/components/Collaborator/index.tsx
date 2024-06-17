@@ -1,11 +1,18 @@
 import { AiFillCloseCircle } from 'react-icons/ai'
 import './Collaborator.css'
+import { ICollaborator } from '../../shared/interfaces/ICollaborator'
+
+interface CollaboratorProps {
+  collaborator: ICollaborator
+  backgroundColor: string
+  onDelete: (id: string) => void
+}
 
 const Collaborator = ({
   collaborator,
   backgroundColor,
   onDelete
-}) => {
+}: CollaboratorProps) => {
 
   return (
     < div className='collaborator' >
